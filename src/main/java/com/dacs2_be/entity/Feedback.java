@@ -1,0 +1,32 @@
+package com.dacs2_be.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDate;
+
+@Getter
+@Setter
+@Entity
+public class Feedback {
+    @Id
+    @Column(name = "feedback_id", nullable = false)
+    private Integer id;
+
+    @Size(max = 255)
+    @Column(name = "content")
+    private String content;
+
+    @Column(name = "date_feedback")
+    private LocalDate dateFeedback;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
+}
