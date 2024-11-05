@@ -1,4 +1,4 @@
-package com.dacs2_be.service;
+package com.dacs2_be.service.impl;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

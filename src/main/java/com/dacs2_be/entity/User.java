@@ -1,6 +1,7 @@
 package com.dacs2_be.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -8,6 +9,8 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,18 +22,20 @@ public class User {
     @Column(name = "user_id", nullable = false)
     private Integer id;
 
-    @NotNull
     @Size(max = 100)
+    @Email(message = "EMAIL_INVALID")
+    @NotNull
+    @Nationalized
     @Column(name = "email", nullable = false, length = 100)
     private String email;
 
     @Size(max = 100)
-    @NotNull
     @Nationalized
-    @Column(name = "password", nullable = false, length = 100)
+    @Column(name = "password", length = 100)
     private String password;
 
     @Size(max = 50)
+    @Nationalized
     @Column(name = "name", length = 50)
     private String name;
 
@@ -53,13 +58,24 @@ public class User {
     private LocalDate birthDate;
 
     @Size(max = 100)
+    @Nationalized
     @Column(name = "activation_code", length = 100)
     private String activationCode;
 
     @Column(name = "status")
     private Boolean status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Feedback> feedbacks = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Order> orders = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Review> reviews = new LinkedHashSet<>();
+
 }

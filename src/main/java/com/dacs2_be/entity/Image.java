@@ -4,20 +4,24 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 @Getter
 @Setter
 @Entity
 public class Image {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id", nullable = false)
     private Integer id;
 
     @Size(max = 255)
+    @Nationalized
     @Column(name = "url_image")
     private String urlImage;
 
     @Size(max = 50)
+    @Nationalized
     @Column(name = "name", length = 50)
     private String name;
 
@@ -30,4 +34,5 @@ public class Image {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
 }

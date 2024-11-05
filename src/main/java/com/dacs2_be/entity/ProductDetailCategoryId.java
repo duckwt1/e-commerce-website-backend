@@ -5,16 +5,15 @@ import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.Hibernate;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
 @Setter
 @Embeddable
-public class ProductDetailCategoryId implements Serializable {
-    private static final long serialVersionUID = -5924141729743870398L;
-
+public class ProductDetailCategoryId implements java.io.Serializable {
+    private static final long serialVersionUID = 6683946488757430080L;
     @NotNull
     @Column(name = "product_id", nullable = false)
     private Integer productId;
@@ -26,14 +25,15 @@ public class ProductDetailCategoryId implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProductDetailCategoryId that = (ProductDetailCategoryId) o;
-        return Objects.equals(productId, that.productId) &&
-                Objects.equals(detailCategoryId, that.detailCategoryId);
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        ProductDetailCategoryId entity = (ProductDetailCategoryId) o;
+        return Objects.equals(this.productId, entity.productId) &&
+                Objects.equals(this.detailCategoryId, entity.detailCategoryId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(productId, detailCategoryId);
     }
+
 }

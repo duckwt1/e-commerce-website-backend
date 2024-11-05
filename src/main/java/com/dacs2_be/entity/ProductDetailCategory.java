@@ -21,4 +21,5 @@ public class ProductDetailCategory {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "detail_category_id", nullable = false)
     private DetailCategory detailCategory;
+
 }

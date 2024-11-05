@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -14,10 +15,12 @@ import java.util.Set;
 @Table(name = "Detail_Category")
 public class DetailCategory {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "detail_category_id", nullable = false)
     private Integer id;
 
     @Size(max = 50)
+    @Nationalized
     @Column(name = "name", length = 50)
     private String name;
 
@@ -25,6 +28,7 @@ public class DetailCategory {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToMany(mappedBy = "detailCategories")
-    private Set<Product> products = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "detailCategory")
+    private Set<ProductDetailCategory> productDetailCategories = new LinkedHashSet<>();
+
 }

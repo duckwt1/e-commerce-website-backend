@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashSet;
@@ -14,10 +15,12 @@ import java.util.Set;
 @Entity
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id", nullable = false)
     private Integer id;
 
     @Size(max = 50)
+    @Nationalized
     @Column(name = "name", length = 50)
     private String name;
 
@@ -31,15 +34,23 @@ public class Product {
     private Integer quantity;
 
     @Size(max = 255)
+    @Nationalized
     @Column(name = "description")
     private String description;
 
-    @ManyToMany
-    @JoinTable(
-            name = "Product_Detail_Category",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "detail_category_id")
-    )
-    private Set<DetailCategory> detailCategories = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "product")
+    private Set<CartDetail> cartDetails = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "product")
+    private Set<Feedback> feedbacks = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "product")
+    private Set<Image> images = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "product")
+    private Set<ProductDetailCategory> productDetailCategories = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "product")
+    private Set<Review> reviews = new LinkedHashSet<>();
 
 }

@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,6 +17,7 @@ import java.time.LocalDate;
 @Table(name = "\"Order\"")
 public class Order {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id", nullable = false)
     private Integer id;
 
@@ -33,6 +37,7 @@ public class Order {
     private BigDecimal paymentFee;
 
     @Size(max = 255)
+    @Nationalized
     @Column(name = "note")
     private String note;
 
@@ -51,5 +56,8 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voucher_id")
     private Voucher voucher;
+
+    @OneToMany(mappedBy = "order")
+    private Set<OrderDetail> orderDetails = new LinkedHashSet<>();
 
 }

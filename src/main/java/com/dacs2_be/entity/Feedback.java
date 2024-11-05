@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDate;
 
@@ -12,10 +13,12 @@ import java.time.LocalDate;
 @Entity
 public class Feedback {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "feedback_id", nullable = false)
     private Integer id;
 
     @Size(max = 255)
+    @Nationalized
     @Column(name = "content")
     private String content;
 
@@ -29,4 +32,5 @@ public class Feedback {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
 }
