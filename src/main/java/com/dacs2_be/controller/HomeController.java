@@ -1,14 +1,21 @@
 package com.dacs2_be.controller;
 
+import com.dacs2_be.dto.LoginRequest;
 import com.dacs2_be.dto.UserDTO;
 import com.dacs2_be.exception.ResourceNotFoundException;
+import com.dacs2_be.security.JwtResponse;
 import com.dacs2_be.service.AuthenticationService;
 import com.dacs2_be.service.MailService;
 import com.dacs2_be.service.UserService;
 import com.dacs2_be.service.impl.UserServiceImpl;
+import com.dacs2_be.service.jwt.JwtService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,10 +32,16 @@ public class HomeController {
     private UserServiceImpl userServices;
 
     @Autowired
+    private JwtService jwtService;
+
+    @Autowired
     private MailService mailerService;
 
     @Autowired
     private AuthenticationService authService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
 
     @Autowired
@@ -46,19 +59,43 @@ public class HomeController {
     }
 
 
+//    @PostMapping("auth/login")
+//    public ResponseEntity<?> login(@RequestBody UserDTO userDTO) throws Exception {
+//        User user = userServices.findByEmail(userDTO.getEmail());
+//
+//        if (user == null) {
+//            throw new ResourceNotFoundException("User not found with email: " + userDTO.getEmail());
+//        }
+//
+//        if (!pe.matches(userDTO.getPassword(), user.getPassword())) {
+//            throw new ResourceNotFoundException("Password is incorrect");
+//        }
+//
+//        return ResponseEntity.ok(user);
+//    }
+
     @PostMapping("auth/login")
-    public ResponseEntity<?> login(@RequestBody UserDTO userDTO) throws Exception {
-        User user = userServices.findByEmail(userDTO.getEmail());
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) throws Exception {
 
-        if (user == null) {
-            throw new ResourceNotFoundException("User not found with email: " + userDTO.getEmail());
+        if (loginRequest.getEmail() == null || loginRequest.getEmail().isEmpty()) {
+            return ResponseEntity.badRequest().body("Email is required");
         }
 
-        if (!pe.matches(userDTO.getPassword(), user.getPassword())) {
-            throw new ResourceNotFoundException("Password is incorrect");
+        try{
+            // authentication sẽ giúp ta lấy dữ liệu từ db để kiểm tra
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+            );
+            // Nếu xác thực thành công
+            if (authentication.isAuthenticated()) {
+                // Tạo token cho người dùng
+                final String jwtToken = jwtService.generateToken(loginRequest.getEmail());
+                return ResponseEntity.ok(new JwtResponse(jwtToken));
+            }
+        } catch (AuthenticationException e) {
+            return ResponseEntity.badRequest().body("Email or password is incorrect!");
         }
-
-        return ResponseEntity.ok(user);
+        return ResponseEntity.badRequest().body("Authentication failed");
     }
 
     @PostMapping("auth/register")
