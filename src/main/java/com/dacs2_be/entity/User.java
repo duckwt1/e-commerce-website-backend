@@ -1,11 +1,10 @@
 package com.dacs2_be.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDate;
@@ -15,6 +14,9 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "\"User\"")
 public class User {
     @Id
@@ -23,7 +25,6 @@ public class User {
     private Integer id;
 
     @Size(max = 100)
-    @Email(message = "EMAIL_INVALID")
     @NotNull
     @Nationalized
     @Column(name = "email", nullable = false, length = 100)
@@ -67,6 +68,7 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
+    @JsonIgnore
     private Role role;
 
     @OneToMany(mappedBy = "user")

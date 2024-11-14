@@ -1,5 +1,6 @@
 package com.dacs2_be.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -19,9 +20,8 @@ public class Product {
     @Column(name = "product_id", nullable = false)
     private Integer id;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "name", length = 50)
+    @Size(max = 500)
+    @Column(name = "name", length = 500)
     private String name;
 
     @Column(name = "list_price", precision = 10, scale = 2)
@@ -48,6 +48,7 @@ public class Product {
     private Set<Image> images = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private Set<ProductDetailCategory> productDetailCategories = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "product")
