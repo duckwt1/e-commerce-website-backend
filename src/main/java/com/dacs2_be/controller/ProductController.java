@@ -1,5 +1,6 @@
 package com.dacs2_be.controller;
 
+import com.dacs2_be.entity.Image;
 import com.dacs2_be.entity.Product;
 import com.dacs2_be.exception.ResourceNotFoundException;
 import com.dacs2_be.service.ProductService;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.dacs2_be.service.ImageService;
 import java.util.List;
 
 @RestController
@@ -30,6 +31,17 @@ public class ProductController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(listProduct);
+    }
+
+    @GetMapping("/{id}/images")
+    public ResponseEntity<List<Image>> getImagesByProductId(@PathVariable int id) {
+        List<Image> images = productService.findImagesByProductId(id);
+
+        if (images.isEmpty()) {
+            throw new ResourceNotFoundException("No images found for product with id: " + id);
+        }
+
+        return ResponseEntity.ok(images);
     }
 
     @GetMapping("{id}")

@@ -1,5 +1,6 @@
 package com.dacs2_be.service;
 
+import com.dacs2_be.entity.Image;
 import com.dacs2_be.entity.Product;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface ProductService {
     Product update(Product product);
 
     void delete(int id);
+
+    List<Image> findImagesByProductId(int id);
 }
