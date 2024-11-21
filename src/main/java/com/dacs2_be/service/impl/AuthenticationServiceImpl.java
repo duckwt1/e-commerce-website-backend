@@ -129,8 +129,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private MailDTO getActivationMail(String email,String name, String code) {
         User user = userRepository.findByEmail(email);
-        String link = "http://localhost:8080/auth/activate-account";
-        String url = String.format("%s?code=%s&email=%s", link, code, email);
+        String link = "http://localhost:3000/activate-account";
+        String url = String.format("%s/%s/%s", link, email, code);
         String subject = "Account Activation Request";
         String button = "background-color:#783ecf;color:#fff;font-size:15px;padding:12px 10px;text-decoration:none;border-radius:3px;font-weight:bold";
         String body = "" +

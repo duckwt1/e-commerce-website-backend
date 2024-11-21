@@ -1,6 +1,5 @@
 package com.dacs2_be.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,7 +13,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +26,6 @@ public class Role {
     private String roleName;
 
     @OneToMany(mappedBy = "role")
-    @JsonIgnoreProperties("role")
     private Set<User> users = new LinkedHashSet<>();
 
 }

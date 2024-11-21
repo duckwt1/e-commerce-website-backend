@@ -22,8 +22,9 @@ public class CartDetail {
     @Column(name = "price", precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Column(name = "cart_id")
-    private Integer cartId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")

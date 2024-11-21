@@ -8,13 +8,14 @@ public class Endpoints {
             "/api/product",
             "/api/product/**",
             "/api/category/**",
+            "auth/activate-account",
+
     };
 
     public static final String[] PUBLIC_POST = {
             "/auth/login",
             "/auth/register",
-            "auth/activate",
-            "auth/forgot-password",
+            "/auth/forgot-password",
             "auth/reset-password",
             "auth/change-password",
 

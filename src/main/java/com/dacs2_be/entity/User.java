@@ -71,6 +71,9 @@ public class User {
     @JsonIgnore
     private Role role;
 
+    @OneToOne(mappedBy = "user")
+    private Cart cart;
+
     @OneToMany(mappedBy = "user")
     private Set<Feedback> feedbacks = new LinkedHashSet<>();
 

@@ -1,5 +1,6 @@
 package com.dacs2_be.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -24,11 +25,12 @@ public class DetailCategory {
     @Column(name = "name", length = 50)
     private String name;
 
+    @OneToMany(mappedBy = "detailCategory")
+    @JsonIgnore
+    private Set<ProductDetailCategory> productDetailCategories = new LinkedHashSet<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
-
-    @OneToMany(mappedBy = "detailCategory")
-    private Set<ProductDetailCategory> productDetailCategories = new LinkedHashSet<>();
 
 }

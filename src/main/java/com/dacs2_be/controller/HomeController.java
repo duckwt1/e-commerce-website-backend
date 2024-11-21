@@ -11,6 +11,7 @@ import com.dacs2_be.service.impl.UserServiceImpl;
 import com.dacs2_be.service.jwt.JwtService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -108,21 +109,26 @@ public class HomeController {
 
         if (authService.register(userDTO)) {
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("User registered successfully.");
         }
         throw new ResourceNotFoundException("Cannot register user with email: " + userDTO.getEmail());
     }
 
-    @PostMapping("auth/activate")
-    public ResponseEntity<?> activateUser(@RequestParam String code, @RequestParam String email) throws Exception {
-        return ResponseEntity.ok(authService.activateAccount(email, code));
+    @GetMapping("auth/activate-account")
+    public ResponseEntity<String> activateAccount(@RequestParam String email, @RequestParam String code) {
+        boolean isActivated = authService.activateAccount(email, code);
+        if (isActivated) {
+            return ResponseEntity.ok("Account activated successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Activation failed.");
+        }
     }
 
     @PostMapping("auth/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestParam String email) throws Exception {
         System.out.println(email);
         if (authService.sendResetMail(email)) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("Reset password email sent successfully.");
         }
         throw new ResourceNotFoundException("User not exists with email: " + email);
     }
@@ -134,9 +140,6 @@ public class HomeController {
         String codeVal = code.orElseThrow(() -> exception);
         User user = authService.findByTActivationCode(codeVal);
         if (user != null) {
-            // Go to change password page
-            RedirectView redirectView = new RedirectView();
-            redirectView.setUrl("http://localhost:8080/auth/change-password");
             return ResponseEntity.ok(user);
         }
         throw exception;

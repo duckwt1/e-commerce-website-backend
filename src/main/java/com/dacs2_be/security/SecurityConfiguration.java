@@ -1,7 +1,6 @@
 package com.dacs2_be.security;
 
 import com.dacs2_be.service.impl.UserDetailsImpl;
-import com.dacs2_be.service.impl.UserServices;
 import com.dacs2_be.service.jwt.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
