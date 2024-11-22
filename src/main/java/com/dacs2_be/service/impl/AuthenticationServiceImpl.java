@@ -37,11 +37,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public boolean changePassword(String email, String password) {
         User user = userService.findByEmail(email);
         if (user == null) {
+            System.out.println("User not found");
             return false;
         }
 
         user.setPassword(password);
-
+        System.out.println("Password changed + " + password);
         User updateUser = userService.update(user);
         return updateUser != null;
     }
@@ -96,14 +97,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public User findByTActivationCode(String code) {
         User user = userRepository.findByActivationCode(hashMethod(code));
-        return user != null ? User.builder().id(user.getId()).activationCode(user.getActivationCode()).build() : null;
+        System.out.println(user.getEmail() + " find by code");
+        return user;
     }
 
     private MailDTO getResetMail(String email, String code) {
         User user = userService.findByEmail(email);
         String name = user.getName();
-        String link = "http://localhost:8080/auth/reset-password";
-        String url = String.format("%s?code=%s", link, code);
+        String link = "http://localhost:3000/reset-password";
+        String url = String.format("%s/%s", link, code);
         String subject = "Password Reset Request";
         String button = "background-color:#783ecf;color:#fff;font-size:15px;padding:12px 10px;text-decoration:none;border-radius:3px;font-weight:bold";
         String body = "" +

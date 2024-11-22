@@ -146,8 +146,10 @@ public class HomeController {
     }
 
     @PostMapping("auth/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody UserDTO user) throws Exception {
-        return ResponseEntity.ok(authService.changePassword(user.getEmail(), pe.encode(user.getPassword())));
+    public ResponseEntity<?> changePassword(@RequestParam String code, @RequestBody String pass) throws Exception {
+        User user = authService.findByTActivationCode(code);
+        System.out.println(user.getEmail() + "-" + pass); ;
+        return ResponseEntity.ok(authService.changePassword(user.getEmail(), pe.encode(pass)));
     }
 
 }
