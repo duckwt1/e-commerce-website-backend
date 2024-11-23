@@ -6,6 +6,7 @@ import com.dacs2_be.exception.ResourceNotFoundException;
 import com.dacs2_be.security.JwtResponse;
 import com.dacs2_be.service.AuthenticationService;
 import com.dacs2_be.service.MailService;
+import com.dacs2_be.service.UploadImageService;
 import com.dacs2_be.service.UserService;
 import com.dacs2_be.service.impl.UserServiceImpl;
 import com.dacs2_be.service.jwt.JwtService;
@@ -19,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import com.dacs2_be.entity.User;
@@ -31,12 +33,10 @@ public class HomeController {
     private final UserService userDetailsService;
     private final PasswordEncoder pe;
     private UserServiceImpl userServices;
+    private final UploadImageService uploadImageService;
 
     @Autowired
     private JwtService jwtService;
-
-    @Autowired
-    private MailService mailerService;
 
     @Autowired
     private AuthenticationService authService;
@@ -46,10 +46,11 @@ public class HomeController {
 
 
     @Autowired
-    public HomeController(UserService userDetailsService, PasswordEncoder pe, UserServiceImpl userServices) {
+    public HomeController(UserService userDetailsService, PasswordEncoder pe, UserServiceImpl userServices, UploadImageService uploadImageService) {
         this.userDetailsService = userDetailsService;
         this.pe = pe;
         this.userServices = userServices;
+        this.uploadImageService = uploadImageService;
     }
 
     @RequestMapping({"/", "/index", "home"})
@@ -150,6 +151,21 @@ public class HomeController {
         User user = authService.findByTActivationCode(code);
         System.out.println(user.getEmail() + "-" + pass); ;
         return ResponseEntity.ok(authService.changePassword(user.getEmail(), pe.encode(pass)));
+    }
+
+    @PostMapping("api/upload")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("name") String name) {
+        String imageUrl = uploadImageService.uploadImage(file, name);
+        return ResponseEntity.ok(imageUrl);
+    }
+
+    @GetMapping("auth/get-user")
+    public ResponseEntity<?> getUser(@RequestParam String email) {
+        User user = userDetailsService.findByEmail(email);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        }
+        throw new ResourceNotFoundException("User not found with email: " + email);
     }
 
 }

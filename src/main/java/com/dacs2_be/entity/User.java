@@ -55,6 +55,9 @@ public class User {
     @Column(name = "phone_number", length = 15)
     private String phoneNumber;
 
+    @Column(name = "avatar")
+    private String avatar;
+
     @Column(name = "birth_date")
     private LocalDate birthDate;
 

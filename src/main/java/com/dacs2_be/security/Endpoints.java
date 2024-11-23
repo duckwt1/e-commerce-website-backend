@@ -9,6 +9,8 @@ public class Endpoints {
             "/api/product/**",
             "/api/category/**",
             "auth/activate-account",
+            "/api/user/{id}",
+            "auth/get-user",
 
     };
 
@@ -18,6 +20,7 @@ public class Endpoints {
             "/auth/forgot-password",
             "auth/reset-password",
             "auth/change-password",
+            "api/upload",
 
     };
 

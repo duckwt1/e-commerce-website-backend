@@ -16,4 +16,5 @@ public interface UserService {
     void delete(int id);
 
     User findByEmail(String email);
+
 }
