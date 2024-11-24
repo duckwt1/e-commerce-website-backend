@@ -40,6 +40,16 @@ public class User {
     @Column(name = "name", length = 50)
     private String name;
 
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "firstname", length = 50)
+    private String firstname;
+
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "lastname", length = 50)
+    private String lastname;
+
     @Size(max = 10)
     @Nationalized
     @Column(name = "gender", length = 10)

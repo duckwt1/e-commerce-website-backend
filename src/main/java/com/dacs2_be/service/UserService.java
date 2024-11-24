@@ -13,6 +13,8 @@ public interface UserService {
 
     User update(User user);
 
+    User patchUpdate(User user);
+
     void delete(int id);
 
     User findByEmail(String email);

@@ -149,7 +149,6 @@ public class HomeController {
     @PostMapping("auth/change-password")
     public ResponseEntity<?> changePassword(@RequestParam String code, @RequestBody String pass) throws Exception {
         User user = authService.findByTActivationCode(code);
-        System.out.println(user.getEmail() + "-" + pass); ;
         return ResponseEntity.ok(authService.changePassword(user.getEmail(), pe.encode(pass)));
     }
 
@@ -163,6 +162,34 @@ public class HomeController {
     public ResponseEntity<?> getUser(@RequestParam String email) {
         User user = userDetailsService.findByEmail(email);
         if (user != null) {
+            return ResponseEntity.ok(user);
+        }
+        throw new ResourceNotFoundException("User not found with email: " + email);
+    }
+
+    @PostMapping("auth/update-user")
+    public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO) {
+        User user = userDetailsService.findByEmail(userDTO.getEmail());
+        if (user != null) {
+            System.out.println(userDTO.getPhoneNumber());
+            user.setName(userDTO.getName());
+            user.setPhoneNumber(userDTO.getPhoneNumber());
+            user.setAddress(userDTO.getAddress());
+            user.setGender(userDTO.getGender());
+            user.setBirthDate(userDTO.getBirthDate());
+            user.setFirstname(userDTO.getFirstname());
+            user.setLastname(userDTO.getLastname());
+            userDetailsService.patchUpdate(user);
+            return ResponseEntity.ok(user);
+        }
+        throw new ResourceNotFoundException("User not found with email: " + userDTO.getEmail());
+    }
+
+    @PostMapping("auth/update-user-password")
+    public ResponseEntity<?> updateUserPassword(@RequestParam String email, @RequestBody String newPassword) {
+        User user = userDetailsService.findByEmail(email);
+        if (user != null) {
+           authService.changePassword(email, pe.encode(newPassword));
             return ResponseEntity.ok(user);
         }
         throw new ResourceNotFoundException("User not found with email: " + email);

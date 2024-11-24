@@ -21,10 +21,16 @@ public class Endpoints {
             "auth/reset-password",
             "auth/change-password",
             "api/upload",
+            "auth/update-user",
+            "auth/update-user-password",
 
     };
 
     public static final String[] PUBLIC_PUT = {
+
+    };
+
+    public static final String[] PUBLIC_PATCH = {
 
     };
 

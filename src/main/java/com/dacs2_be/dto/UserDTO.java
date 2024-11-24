@@ -15,9 +15,11 @@ public class UserDTO implements Serializable {
 
     private String password;
 
-    private String phone;
-
     private String name;
+
+    private String firstname;
+
+    private String lastname;
 
     private String gender;
 
@@ -25,7 +27,7 @@ public class UserDTO implements Serializable {
 
     private String address;
 
-    private String phone_number;
+    private String phoneNumber;
 
     private String activation_code;
 
