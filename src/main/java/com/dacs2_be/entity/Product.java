@@ -33,6 +33,9 @@ public class Product {
     @Column(name = "quantity")
     private Integer quantity;
 
+    @Column(name = "discount_percent")
+    private Integer discount_percent;
+
     @Size(max = 255)
     @Nationalized
     @Column(name = "description")

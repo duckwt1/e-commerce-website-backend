@@ -195,4 +195,13 @@ public class HomeController {
         throw new ResourceNotFoundException("User not found with email: " + email);
     }
 
+    @PostMapping("auth/register-shop")
+    public ResponseEntity<?> registerShop(@RequestBody UserDTO userDTO) throws Exception {
+        if (authService.registerShop(userDTO)) {
+
+            return ResponseEntity.ok("Seller registered successfully.");
+        }
+        throw new ResourceNotFoundException("Cannot register user with email: " + userDTO.getEmail());
+    }
+
 }

@@ -26,11 +26,4 @@ public class UserController {
 
         return ResponseEntity.ok(listUser);
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
-        User user = userService.findById(id);
-        return ResponseEntity.ok(user);
-    }
-
 }
