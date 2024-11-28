@@ -13,4 +13,6 @@ public interface AuthenticationService {
     boolean activateAccount(String email,String code);
 
     boolean register(UserDTO userDTO);
+
+    boolean registerShop(UserDTO userDTO);
 }

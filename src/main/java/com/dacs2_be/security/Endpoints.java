@@ -23,6 +23,7 @@ public class Endpoints {
             "api/upload",
             "auth/update-user",
             "auth/update-user-password",
+            "auth/register-shop",
 
     };
 
@@ -35,6 +36,10 @@ public class Endpoints {
     };
 
     public static final String[] PUBLIC_DELETE = {
+
+    };
+
+    public static final String[] SELLER_ENDPOINT = {
 
     };
 

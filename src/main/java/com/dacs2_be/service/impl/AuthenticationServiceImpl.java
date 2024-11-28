@@ -80,6 +80,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userService.create(newUser) != null;
     }
 
+    public boolean registerShop(UserDTO user) {
+
+        User seller = userService.findByEmail(user.getEmail());
+
+        if (seller == null) {
+            return false;
+        }
+
+        Role role = roleRepository.findByRoleName("ROLE_SELLER");
+
+        seller.setAddress(user.getAddress());
+        seller.setPhoneNumber(user.getPhoneNumber());
+        seller.setName(user.getName());
+        seller.setRole(role);
+
+        return userService.update(seller) != null;
+    }
+
     @Override
     public boolean sendResetMail(String email) {
         User user = userService.findByEmail(email);
