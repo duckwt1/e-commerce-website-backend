@@ -30,6 +30,8 @@ public class DetailCategory {
     private Set<ProductDetailCategory> productDetailCategories = new LinkedHashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
+
+    @JsonIgnore
     @JoinColumn(name = "category_id")
     private Category category;
 
