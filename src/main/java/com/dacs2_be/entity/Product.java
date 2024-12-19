@@ -36,6 +36,11 @@ public class Product {
     @Column(name = "discount_percent")
     private Integer discount_percent;
 
+    @Column(name="rating")
+    private Double rating;
+
+
+
     @Size(max = 255)
     @Nationalized
     @Column(name = "description")
