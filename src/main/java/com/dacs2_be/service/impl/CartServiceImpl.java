@@ -85,4 +85,10 @@ public class CartServiceImpl implements CartService {
         }
         return ResponseEntity.badRequest().build();
     }
+
+    @Override
+    public List<CartDetail> getCartItemsByCartId(Integer cartId) {
+        System.out.println("cartId: " + cartId);
+        return cartDetailRepository.findByCartId(cartId);
+    }
 }

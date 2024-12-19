@@ -66,10 +66,10 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, Endpoints.SELLER_ENDPOINT).hasAuthority("SELLER")
                         .requestMatchers(HttpMethod.PUT, Endpoints.SELLER_ENDPOINT).hasAuthority("SELLER")
                         .requestMatchers(HttpMethod.DELETE, Endpoints.SELLER_ENDPOINT).hasAuthority("SELLER")
-                        .requestMatchers(HttpMethod.GET, Endpoints.ADMIN_ENDPOINT).hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.POST, Endpoints.ADMIN_ENDPOINT).hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, Endpoints.ADMIN_ENDPOINT).hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, Endpoints.ADMIN_ENDPOINT).hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, Endpoints.ADMIN_ENDPOINT).hasAuthority("MANAGER")
+                        .requestMatchers(HttpMethod.POST, Endpoints.ADMIN_ENDPOINT).hasAuthority("MANAGER")
+                        .requestMatchers(HttpMethod.PUT, Endpoints.ADMIN_ENDPOINT).hasAuthority("MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, Endpoints.ADMIN_ENDPOINT).hasAuthority("MANAGER")
         );
         // Cấu hình cors
         http.cors(cors -> {

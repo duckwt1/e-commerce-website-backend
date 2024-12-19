@@ -40,4 +40,12 @@ public class CartController {
     public ResponseEntity<?> removeProductFromCart(@PathVariable Integer cartDetailId) {
         return cartService.removeProductFromCart(cartDetailId);
     }
+
+    @GetMapping("findByUserId")
+    public ResponseEntity<?> getCartItemsByUserId(@RequestParam Integer userId) {
+
+        int cartId = cartService.getCartByUserId(userId).getId();
+
+        return ResponseEntity.ok(cartService.getCartItemsByCartId(cartId));
+    }
 }

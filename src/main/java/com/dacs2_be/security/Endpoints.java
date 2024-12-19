@@ -11,6 +11,7 @@ public class Endpoints {
             "auth/activate-account",
             "/api/user/{id}",
             "auth/get-user",
+            "/api/cart/findByUserId",
 
     };
 
@@ -40,6 +41,7 @@ public class Endpoints {
     };
 
     public static final String[] SELLER_ENDPOINT = {
+
 
     };
 
