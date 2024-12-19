@@ -12,6 +12,7 @@ public class Endpoints {
             "/api/user/{id}",
             "auth/get-user",
             "/api/cart/findByUserId",
+            "/api/cart-detail/{cartId}",
 
     };
 
@@ -25,6 +26,7 @@ public class Endpoints {
             "auth/update-user",
             "auth/update-user-password",
             "auth/register-shop",
+            "api/cart/{userId}/add/**",
 
     };
 

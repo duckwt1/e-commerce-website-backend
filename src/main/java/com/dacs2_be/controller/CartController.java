@@ -1,6 +1,7 @@
 package com.dacs2_be.controller;
 
 
+import com.dacs2_be.dto.CartItemDTO;
 import com.dacs2_be.entity.Cart;
 import com.dacs2_be.entity.CartDetail;
 import com.dacs2_be.repository.CartDetailRepository;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -27,8 +29,8 @@ public class CartController {
     }
 
     @PostMapping("/{userId}/add")
-    public ResponseEntity<?> addProductToCart(@PathVariable Integer userId, @RequestBody CartDetail cartDetail) {
-        return cartService.addProductToCart(userId, cartDetail);
+    public ResponseEntity<?> addProductToCart(@PathVariable Integer userId,@RequestParam int productId,@RequestParam  int quantity) {
+        return cartService.addProductToCart(userId, productId, quantity);
     }
 
     @PutMapping("/update/{cartDetailId}")
@@ -42,10 +44,12 @@ public class CartController {
     }
 
     @GetMapping("findByUserId")
-    public ResponseEntity<?> getCartItemsByUserId(@RequestParam Integer userId) {
+    public ResponseEntity<List<CartItemDTO>> getCartItemsByUserId(@RequestParam Integer userId) {
 
         int cartId = cartService.getCartByUserId(userId).getId();
 
         return ResponseEntity.ok(cartService.getCartItemsByCartId(cartId));
     }
+
+
 }

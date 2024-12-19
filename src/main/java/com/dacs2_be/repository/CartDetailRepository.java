@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface CartDetailRepository extends JpaRepository<CartDetail, Integer> {
     List<CartDetail> findByCartId(Integer cartId);
+    //add product to cart
+
+
 }

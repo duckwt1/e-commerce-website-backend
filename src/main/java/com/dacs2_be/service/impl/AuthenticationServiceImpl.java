@@ -2,6 +2,7 @@ package com.dacs2_be.service.impl;
 
 import com.dacs2_be.dto.MailDTO;
 import com.dacs2_be.dto.UserDTO;
+import com.dacs2_be.repository.CartRepository;
 import com.dacs2_be.repository.RoleRepository;
 import com.dacs2_be.repository.UserRepository;
 import com.dacs2_be.service.AuthenticationService;
@@ -26,6 +27,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @Autowired
     private UserService userService;
@@ -76,6 +80,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         // Gửi email kích hoạt
         mailer.queue(getActivationMail(user.getEmail(), user.getName(), activationCode));
+
+        // Create cart for user
+
 
         return userService.create(newUser) != null;
     }
@@ -147,7 +154,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new MailDTO(email, subject, body);
     }
 
-    private MailDTO getActivationMail(String email,String name, String code) {
+    private MailDTO getActivationMail(String email, String name, String code) {
         User user = userRepository.findByEmail(email);
         String link = "http://localhost:3000/activate-account";
         String url = String.format("%s/%s/%s", link, email, code);

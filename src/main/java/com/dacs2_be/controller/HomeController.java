@@ -4,10 +4,7 @@ import com.dacs2_be.dto.LoginRequest;
 import com.dacs2_be.dto.UserDTO;
 import com.dacs2_be.exception.ResourceNotFoundException;
 import com.dacs2_be.security.JwtResponse;
-import com.dacs2_be.service.AuthenticationService;
-import com.dacs2_be.service.MailService;
-import com.dacs2_be.service.UploadImageService;
-import com.dacs2_be.service.UserService;
+import com.dacs2_be.service.*;
 import com.dacs2_be.service.impl.UserServiceImpl;
 import com.dacs2_be.service.jwt.JwtService;
 import lombok.SneakyThrows;
@@ -43,6 +40,9 @@ public class HomeController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private CartService cartService;
 
 
     @Autowired
@@ -109,7 +109,7 @@ public class HomeController {
         userDTO.setPassword(pe.encode(userDTO.getPassword()));
 
         if (authService.register(userDTO)) {
-
+            cartService.createCart(userDTO.getEmail());
             return ResponseEntity.ok("User registered successfully.");
         }
         throw new ResourceNotFoundException("Cannot register user with email: " + userDTO.getEmail());
@@ -198,7 +198,6 @@ public class HomeController {
     @PostMapping("auth/register-shop")
     public ResponseEntity<?> registerShop(@RequestBody UserDTO userDTO) throws Exception {
         if (authService.registerShop(userDTO)) {
-
             return ResponseEntity.ok("Seller registered successfully.");
         }
         throw new ResourceNotFoundException("Cannot register user with email: " + userDTO.getEmail());

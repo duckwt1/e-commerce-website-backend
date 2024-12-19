@@ -1,6 +1,7 @@
 package com.dacs2_be.service.impl;
 
 
+import com.dacs2_be.dto.CartItemDTO;
 import com.dacs2_be.entity.Cart;
 import com.dacs2_be.entity.CartDetail;
 import com.dacs2_be.entity.Product;
@@ -38,31 +39,48 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ResponseEntity<?> addProductToCart(Integer userId, CartDetail cartDetail) {
+    public ResponseEntity<?> addProductToCart(Integer userId, int productId, int quantity) {
         try {
-        Cart cart = cartRepository.findByUserId(userId);
-        if (cart == null) {
-            cart = new Cart();
-            cart.setUser(userRepository.findById(userId).orElse(null));
-            cart.setTotalAmount(cartDetail.getPrice().multiply(new BigDecimal(cartDetail.getQuantity())));
+            // Find the product by its ID
+            Product product = productRepository.findById(productId);
+
+            if (product == null) {
+                return ResponseEntity.badRequest().body("Product not found");
+            }
+
+            // Create or update the Cart
+            Cart cart = cartRepository.findByUserId(userId);
+
+            if (cart == null) {
+                // Create a new cart if it doesn't exist
+                cart = new Cart();
+                cart.setUser(userRepository.findById(userId).orElse(null));
+                cart.setTotalAmount(BigDecimal.ZERO); // Start with zero total amount
+                cartRepository.save(cart);
+            }
+
+            // Create a CartDetail for the product
+            CartDetail cartDetail = new CartDetail();
+            cartDetail.setProduct(product);
+            cartDetail.setQuantity(quantity);
+            cartDetail.setCart(cart);
+
+            // Calculate price for the CartDetail (assuming the Product has a price attribute)
+            BigDecimal price = product.getSellPrice(); // Assuming the price field is 'sellPrice'
+            cartDetail.setPrice(price);
+
+
+            // Save the cart detail and cart
+            cartDetailRepository.save(cartDetail);
             cartRepository.save(cart);
-        } else {
-            cart.setTotalAmount(cart.getTotalAmount().add(cartDetail.getPrice().multiply(new BigDecimal(cartDetail.getQuantity()))));
+
+            return ResponseEntity.ok(cart);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Failed to add product to cart");
         }
-        cartDetail.setCart(cart);
-        List<Product> products = productRepository.searchByNameLike(cartDetail.getProduct().getName());
-        if (!products.isEmpty()) {
-            cartDetail.setProduct(products.get(0)); // Set the first matching product
-        } else {
-            return ResponseEntity.badRequest().body("Product not found");
-        }
-        cartDetailRepository.save(cartDetail);
-        return ResponseEntity.ok(cart);
-     }catch (Exception e) {
-        e.printStackTrace();
-            return ResponseEntity.badRequest().body("Failed to add products");
-        }
-                }
+    }
+
 
     @Override
     public ResponseEntity<?> updateProductInCart(Integer cartDetailId, Integer quantity) {
@@ -87,8 +105,23 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartDetail> getCartItemsByCartId(Integer cartId) {
-        System.out.println("cartId: " + cartId);
-        return cartDetailRepository.findByCartId(cartId);
+    public List<CartItemDTO> getCartItemsByCartId(Integer cartId) {
+        List<CartDetail> cartDetails = cartDetailRepository.findByCartId(cartId);
+
+        return cartDetails.stream().map(cartDetail -> {
+            CartItemDTO cartItemDTO = new CartItemDTO();
+            cartItemDTO.setId(cartDetail.getId());
+            cartItemDTO.setQuantity(cartDetail.getQuantity());
+            cartItemDTO.setProduct(cartDetail.getProduct());
+            return cartItemDTO;
+        }).toList();
+    }
+
+    @Override
+    public boolean createCart(String email) {
+        Cart cart = new Cart();
+        cart.setUser(userRepository.findByEmail(email));
+        cartRepository.save(cart);
+        return true;
     }
 }

@@ -2,6 +2,7 @@ package com.dacs2_be.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class Cart {
     @Column(name = "cart_id", nullable = false)
     private Integer id;
 
+    @Null
     @Column(name = "total_amount", precision = 10, scale = 2)
     private BigDecimal totalAmount;
 
